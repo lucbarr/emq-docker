@@ -3,6 +3,7 @@ FROM alpine:3.7
 MAINTAINER Huang Rui <vowstar@gmail.com>, Turtle <turtled@emqtt.io>
 
 ENV EMQ_VERSION=v2.3.11
+ENV EMQ_TFG_VERSION=tfg-v1
 
 COPY ./start.sh /start.sh
 
@@ -78,7 +79,7 @@ RUN set -ex \
         ncurses-libs \
         readline \
     # add latest rebar
-    && git clone https://github.com/topfreegames/emq-relx.git /emqttd \
+    && git clone -b ${EMQ_TFG_VERSION} https://github.com/topfreegames/emq-relx.git /emqttd \
     && cd /emqttd \
     && make \
     && mkdir -p /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
