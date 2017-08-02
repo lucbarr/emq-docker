@@ -90,6 +90,8 @@ RUN set -ex \
     && apk --purge del .build-deps .fetch-deps \
     && rm -rf /var/cache/apk/*
 
+RUN apk --no-cache add mosquitto-clients
+
 WORKDIR /opt/emqttd
 
 # start emqttd and initial environments
