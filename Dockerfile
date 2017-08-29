@@ -3,7 +3,7 @@ FROM alpine:3.7
 MAINTAINER Huang Rui <vowstar@gmail.com>, Turtle <turtled@emqtt.io>
 
 ENV EMQ_VERSION=v2.3-beta.3
-ENV EMQ_TFG_VERSION=tfg-v2.1
+ENV EMQ_TFG_VERSION=tfg-v2.2
 
 COPY ./start.sh /start.sh
 
