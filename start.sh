@@ -184,13 +184,13 @@ fi
 #          you must let user know emqtt crashed and stop this container,
 #          and docker dispatching system can known and restart this container.
 IDLE_TIME=0
-while [[ $IDLE_TIME -lt 5 ]]
+while [[ $IDLE_TIME -lt 10 ]]
 do  
     IDLE_TIME=$((IDLE_TIME+1))
     if [[ ! -z "$(/opt/emqttd/bin/emqttd_ctl status |grep 'is running'|awk '{print $1}')" ]]; then
         IDLE_TIME=0
     else
-        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((25-IDLE_TIME*5)) seconds"
+        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((50-IDLE_TIME*5)) seconds"
     fi
     sleep 5
 done
