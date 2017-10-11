@@ -100,12 +100,12 @@ do
         VAR_NAME=$(echo "$VAR" | sed -r "s/EMQ_(.*)=.*/\1/g" | tr '[:upper:]' '[:lower:]' | sed -r "s/__/\./g")
         VAR_FULL_NAME=$(echo "$VAR" | sed -r "s/(.*)=.*/\1/g")
         # Config in emq.conf
-        if [[ ! -z "$(cat $CONFIG |grep -E "^(^|^#*|^#*s*)$VAR_NAME")" ]]; then
+        if [[ ! -z "$(cat $CONFIG |grep -E "^(^|^#*|^#*\s*)$VAR_NAME")" ]]; then
             echo "$VAR_NAME=$(eval echo \$$VAR_FULL_NAME)"
             sed -r -i "s/(^#*\s*)($VAR_NAME)\s*=\s*(.*)/\2 = $(eval echo \$$VAR_FULL_NAME)/g" $CONFIG
         fi
         # Config in plugins/*
-        if [[ ! -z "$(cat $CONFIG_PLUGINS/* |grep -E "^(^|^#*|^#*s*)$VAR_NAME")" ]]; then
+        if [[ ! -z "$(cat $CONFIG_PLUGINS/* |grep -E "^(^|^#*|^#*\s*)$VAR_NAME")" ]]; then
             echo "$VAR_NAME=$(eval echo \$$VAR_FULL_NAME)"
             sed -r -i "s/(^#*\s*)($VAR_NAME)\s*=\s*(.*)/\2 = $(eval echo \$$VAR_FULL_NAME)/g" $(ls $CONFIG_PLUGINS/*)
         fi        
@@ -174,13 +174,13 @@ fi
 #          you must let user know emqtt crashed and stop this container,
 #          and docker dispatching system can known and restart this container.
 IDLE_TIME=0
-while [[ $IDLE_TIME -lt 5 ]]
+while [[ $IDLE_TIME -lt 10 ]]
 do  
     IDLE_TIME=$((IDLE_TIME+1))
     if [[ ! -z "$(/opt/emqttd/bin/emqttd_ctl status |grep 'is running'|awk '{print $1}')" ]]; then
         IDLE_TIME=0
     else
-        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((25-IDLE_TIME*5)) seconds"
+        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((50-IDLE_TIME*5)) seconds"
     fi
     sleep 5
 done
