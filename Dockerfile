@@ -2,8 +2,8 @@ FROM alpine:3.5
 
 MAINTAINER Huang Rui <vowstar@gmail.com>, Turtle <turtled@emqtt.io>
 
-ENV EMQ_VERSION=v2.3-beta.3
-ENV EMQ_TFG_VERSION=tfg-v2.3
+ENV EMQ_VERSION=v2.3-rc.1
+ENV EMQ_TFG_VERSION=tfg-v2.3-rc.1
 
 COPY ./start.sh /start.sh
 
@@ -97,6 +97,13 @@ WORKDIR /opt/emqttd
 
 # start emqttd and initial environments
 CMD ["/opt/emqttd/start.sh"]
+
+RUN adduser -D -u 1000 emqtt
+
+RUN chgrp -Rf root /opt/emqttd && chmod -Rf g+w /opt/emqttd \
+      && chown -Rf emqtt /opt/emqttd
+
+USER emqtt
 
 VOLUME ["/opt/emqttd/log", "/opt/emqttd/data", "/opt/emqttd/lib", "/opt/emqttd/etc"]
 

@@ -2,7 +2,7 @@
 
 *EMQ* (Erlang MQTT Broker) is a distributed, massively scalable, highly extensible MQTT message broker written in Erlang/OTP.
 
-Current docker image size: 37.1 MB 
+Current docker image size: 37.1 MB
 
 ### Get emqttd
 
@@ -11,7 +11,7 @@ You can build this docker image by yourself.
 ```bash
 git clone -b master https://github.com/emqtt/emq_docker.git
 cd emq_docker
-docker build -t emq:latest . 
+docker build -t emq:latest .
 ```
 
 ### Run emqttd
@@ -23,6 +23,8 @@ Execute some command under this docker image
 For example
 
 ``docker run --rm -ti --name emq -p 18083:18083 -p 1883:1883 emq:latest``
+
+The emqtt erlang broker runs as linux user `emqtt` in the docker container.
 
 ### Configuration
 
@@ -60,6 +62,7 @@ These environment variables will ignore for configuration file.
 | ---------------------------| ------------------ | ------------------------- | ------------------------------------- |
 | EMQ_NAME                   | container name     | none                      | emq node short name                   |
 | EMQ_HOST                   | container IP       | none                      | emq node host, IP or FQDN             |
+| EMQ_WAIT_TIME              | 5                  | none                      | wait time in sec before timeout       |
 | EMQ_JOIN_CLUSTER           | none               | none                      | Initial cluster to join               |
 | EMQ_ADMIN_PASSWORD         | public             | none                      | emq admin password                    |
 | PLATFORM_ETC_DIR           | /opt/emqtt/etc     | {{ platform_etc_dir }}    | The etc directory                     |
@@ -89,7 +92,7 @@ For example, set mqtt tcp port to 1883
 | ------------------------ | ------------------ | ------------------------------------- |
 | EMQ_LOADED_PLUGINS       | see content below  | default plugins emq loaded            |
 
-Default environment variable ``EMQ_LOADED_PLUGINS``, including 
+Default environment variable ``EMQ_LOADED_PLUGINS``, including
 
 - ``emq_recon``
 - ``emq_modules``
@@ -146,7 +149,7 @@ docker run --rm -ti --name emq -p 18083:18083 -p 1883:1883 -p 4369:4369 \
 
 ### Cluster
 
-You can specify a initial cluster and join. 
+You can specify a initial cluster and join.
 
 > Note: You must publsh port 4369 and range of port 6000-6999 for EMQ Clustered.
 

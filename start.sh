@@ -33,6 +33,10 @@ if [[ -z "$EMQ_HOST" ]]; then
     export EMQ_HOST="$LOCAL_IP"
 fi
 
+if [[ -z "$EMQ_WAIT_TIME" ]]; then
+    export EMQ_WAIT_TIME=5
+fi
+
 if [[ -z "$EMQ_NODE__NAME" ]]; then
     export EMQ_NODE__NAME="$EMQ_NAME@$EMQ_HOST"
 fi
@@ -137,7 +141,7 @@ do
     sleep 1
     echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:waiting emqttd"
     WAIT_TIME=$((WAIT_TIME+1))
-    if [[ $WAIT_TIME -gt 5 ]]; then
+    if [[ $WAIT_TIME -gt $EMQ_WAIT_TIME ]]; then
         echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:timeout error"
         exit 1
     fi
@@ -170,13 +174,13 @@ fi
 #          you must let user know emqtt crashed and stop this container,
 #          and docker dispatching system can known and restart this container.
 IDLE_TIME=0
-while [[ $IDLE_TIME -lt 5 ]]
+while [[ $IDLE_TIME -lt 10 ]]
 do  
     IDLE_TIME=$((IDLE_TIME+1))
     if [[ ! -z "$(/opt/emqttd/bin/emqttd_ctl status |grep 'is running'|awk '{print $1}')" ]]; then
         IDLE_TIME=0
     else
-        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((25-IDLE_TIME*5)) seconds"
+        echo "['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:emqttd not running, waiting for recovery in $((50-IDLE_TIME*5)) seconds"
     fi
     sleep 5
 done
