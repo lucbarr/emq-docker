@@ -79,7 +79,7 @@ RUN set -ex \
         ncurses-libs \
         readline \
     # add latest rebar
-    && git clone -b ${EMQ_TFG_VERSION} https://github.com/topfreegames/emq-relx.git /emqttd \
+    && git clone -b build-new https://github.com/lucbarr/emq-relx.git /emqttd \
     && cd /emqttd \
     && make \
     && mkdir -p /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
