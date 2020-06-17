@@ -1,5 +1,6 @@
 FROM alpine:3.5
 
+
 MAINTAINER Huang Rui <vowstar@gmail.com>, Turtle <turtled@emqtt.io>
 
 ENV EMQ_VERSION=v2.3-rc.1
@@ -67,9 +68,16 @@ RUN set -ex \
         erlang-megaco \
         erlang-parsetools \
         erlang-cosevent \
-        erlang-compiler \
+        erlang-compiler
+
+RUN apk add --no-cache wget
+RUN wget --no-check-certificate https://s3.amazonaws.com/rebar3/rebar3 && chmod +x rebar3 && ls
+RUN ./rebar3 local install
     # add fetch deps, remove after build
-    && apk add --no-cache --virtual .fetch-deps \
+
+ENV PATH="${PWD}:${PATH}"
+
+RUN apk add --no-cache --virtual .fetch-deps \
         git \
         wget \
     # add run deps, never remove
@@ -79,7 +87,7 @@ RUN set -ex \
         ncurses-libs \
         readline \
     # add latest rebar
-    && git clone -b ${EMQ_TFG_VERSION} https://github.com/topfreegames/emq-relx.git /emqttd \
+    && git clone -b build-new https://github.com/lucbarr/emq-relx.git /emqttd \
     && cd /emqttd \
     && make \
     && mkdir -p /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
